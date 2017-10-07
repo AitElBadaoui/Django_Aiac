@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TROMBINOSCOPE {{ promotion|upper }}</title>
+    <style>
+        @page{
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+        td{
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <center><p style="font-size: 20px;">TROMBINOSCOPE {{ promotion|upper }}</p></center>
+    <center><p style="font-size: 15px;">Année Univérsitaire {{ semestre.annee_universitaire }}</p></center>
+   <br><br>
+   <table  style="table-layout:fixed; width: 100px;" border="1">
+
+            {% for etu in etudiant %}
+                {% if forloop.counter == 1 %}
+                    <tr>
+                {% endif %}
+             {% if forloop.counter == 6 or forloop.counter == 11 or forloop.counter|divisibleby:16 or forloop.counter|divisibleby:21 or forloop.counter|divisibleby:26%}<tr>{% endif %}
+            <td width="110" height="40">
+                <center><img src={{ etu.image }} width="130px" height="150px" style="padding-top: 15px;"></center><br>
+                <center>{{ etu.nom }} {{ etu.prenom }}</center>
+            </td>
+               {% if forloop.counter|divisibleby:5 %} </tr>{% endif %}
+            {% endfor %}
+
+    </table>
+</body>
+</html>

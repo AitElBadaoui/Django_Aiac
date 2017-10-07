@@ -1,0 +1,75 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>AIAC | Espace Utilisateur</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+
+  <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
+<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+
+      <link rel="stylesheet" href="{% static 'css/accueil/style.css' %}">
+<style>
+ul.errorlist.nonfield{
+    list-style: circle;
+    color: red;
+    font-family: raleway;
+    font-size: 13px;
+    padding-bottom: 15px;
+}
+
+
+</style>
+
+</head>
+
+<body>
+
+<!-- Form Mixin-->
+<!-- Input Mixin-->
+<!-- Button Mixin-->
+<!-- Pen Title-->
+<div class="pen-title">
+  <h2 style="color:white;">Académie internationale de mohammed VI</h2>
+    <!--</center>-->
+</div>
+<!-- Form Module-->
+<div class="module form-module">
+  <div class="toggle"><i class="fa fa-times fa-pencil"></i>
+
+  </div>
+  <div class="form">
+      <center><h2 style="color:#5e5e5e; border-bottom: 1px dashed #a0a6ad; padding-bottom: 5px;">Espace utilisateur</h2></center>
+        <h2>Se connecter</h2>
+    <form action="." method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {{ form.username }}
+        {{ form.password }}
+
+      <button>se connecter</button>
+    </form>
+  </div>
+  <div class="form">
+    <h2>Create an account</h2>
+    <form>
+      <input type="text" placeholder="Username"/>
+      <input type="password" placeholder="Password"/>
+      <input type="email" placeholder="Email Address"/>
+      <input type="tel" placeholder="Phone Number"/>
+      <button>Register</button>
+    </form>
+  </div>
+  <!--<div class="cta"><a href="http://www.aiac.ma/">Forgot your password?</a></div>-->
+</div>
+  <script src="{% static  'js/jQuery/jquery-2.2.3.min.js'%}"></script>
+    <script src="{% static 'js/accueil/button.js ' %}"> </script>
+    <script src="{% static 'js/accueil/jquery.backstretch.min.js' %}"></script>
+    <script src="{% static  'js/accueil/index.js'%}"></script>
+    <script>
+        $.backstretch("/static/img/wing-plane-flying-airplane-62623.jpeg", {speed: 500});
+    </script>
+</body>
+</html>

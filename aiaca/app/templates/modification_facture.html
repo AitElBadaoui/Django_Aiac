@@ -1,0 +1,529 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load filtre %}
+  {% block title %}ICNA | Mémoire des sommes dues pour vacations{% endblock %}
+    {% block style %}
+      <!-- DataTables -->
+       <link rel="stylesheet" href="{% static '/css/dataTables.bootstrap.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+      <!-- Theme style -->
+        <style>
+        table{
+            font-family: Cambria;
+        }
+        table > p{
+            margin-left: 5px;
+        }
+        </style>
+    {% endblock %}
+    {% block header %}
+        <h1><br><br></h1>
+        <small> </small>
+    {% endblock %}
+        {% block menu %}
+        <li>
+          <a href="{% url 'index' %}">
+            <i class="fa fa-home "></i> <span>Accueil</span>
+          </a>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-calendar"></i> <span>Emploi du Temps</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'emploi_courant' %}"><i class="fa fa-circle-o"></i> Courant</a></li>
+            <li class=""><a href="{% url 'emploi_courant_archive' %}"><i class="fa fa-circle-o"></i> Archivés</a></li>
+          </ul>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-book"></i> <span>Matières</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'matiere' %}"><i class="fa fa-circle-o"></i> Lister</a></li>
+            <li class=""><a href="http://127.0.0.1:8000/admin/app/matiere/"><i class="fa fa-circle-o text-aqua"></i> Gérer</a></li>
+          </ul>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-graduation-cap"></i> <span>Etudiants</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'gestion_etudiant' %}"><i class="fa fa-circle-o"></i> Lister</a></li>
+            <li class=""><a href="http://127.0.0.1:8000/admin/app/etudiant/"><i class="fa fa-circle-o text-aqua"></i> Gérer</a></li>
+          </ul>
+        </li>
+        <li class=" treeview active">
+          <a href="#">
+            <i class="fa fa-suitcase"></i> <span>Professeurs</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active"><a href="{% url 'prof' %}"><i class="fa fa-circle-o"></i> Lister</a></li>
+            <li class=""><a href="http://127.0.0.1:8000/admin/app/professeur/"><i class="fa fa-circle-o text-aqua"></i> Gérer</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-address-book"></i> <span>Répertoire téléphonique</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{% url 'repertoire_prof' %}"><i class="fa fa-circle-o"></i> Professeurs</a></li>
+            <li><a href="{% url 'repertoire_etud' %}"><i class="fa fa-circle-o"></i> Etudiants</a></li>
+          </ul>
+        </li>
+            <li>
+        <a href="{% url 'tuto' %}">
+            <i class="fa fa-newspaper-o"></i> <span>Mode d'emploi</span>
+        </a>
+        </li>
+    {% endblock %}
+    {% block  breadcrumb%}
+        <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+        <li class="active"><a href="#">Mémoire des sommes dues pour vacations</a></li>
+    {% endblock %}
+    {% block content %}
+        <div class="box" style="font-family: Cambria">
+            <h3 style="font-family: 'Times New Roman';"><u><b><center>Mémoire des sommes dues pour vacations</center></b></u></h3><br><br>
+            <div style="margin-left: 90px;">
+            <h4 style="font-family: 'Times New Roman';">Nom : {{ prof.nom }}</h4>
+            <h4 style="font-family: 'Times New Roman';">Prenom : {{ prof.prenom }}</h4>
+            <h4 style="font-family: 'Times New Roman';">Grade(Enseignant-chercheur):{{ prof.diplome.libelle }} </h4>
+            <h4 style="font-family: 'Times New Roman';">Diplôme (Autre personnel):{{ prof.grade|default_if_none:"" }} </h4>
+            <h4 style="font-family: 'Times New Roman';">Matière Enseignée: {{ matiere }}</h4>
+            <h4 style="font-family: 'Times New Roman';">Mois et Année : {{ month|month_name }} {{ year }}</h4>
+        </div>
+        <table width="900" border="1" style="margin: auto ; margin-top: 50px;">
+            <tbody>
+                <tr>
+                    <td rowspan="2" width="76">
+                        <h4>Jours</h4>
+                    </td>
+                    <td colspan="5" width="539">
+                        <h4><center>Nombre d&rsquo;heures</center></h4>
+                    </td>
+                </tr>
+            <tr>
+            <td width="70">
+            <p style="margin-left:5px"><strong>1<sup>&egrave;re</sup> Semaine</strong></p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px"><strong>2<sup>&egrave;me</sup> Semaine</strong></p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px"><strong>3<sup>&egrave;me</sup> Semaine</strong></p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px"><strong>4<sup>&egrave;me</sup> Semaine</strong></p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px"><strong>5<sup>&egrave;me</sup> Semaine</strong></p>
+            </td>
+
+            </tr>
+            <tr>
+            <td width="76">
+{% csrf_token %}
+                <form action="{{ request.path }}/done" method="post">
+
+            <p style="margin-left:5px"><strong>Lundi</strong></p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine1 %}
+                    {% for sc1 in semaine1 %}
+                        <input type="text"  name="semaine1_lundi" value="{{ sc1.lundi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine1_lundi">
+                {% endif %}
+
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine2 %}
+                    {% for sc1 in semaine2 %}
+                        <input type="text"  name="semaine2_lundi" value="{{ sc1.lundi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine2_lundi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine3 %}
+                    {% for sc1 in semaine3 %}
+                        <input type="text"  name="semaine3_lundi" value="{{ sc1.lundi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine3_lundi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine4 %}
+                    {% for sc1 in semaine4 %}
+                        <input type="text"  name="semaine4_lundi" value="{{ sc1.lundi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine4_lundi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine5 %}
+                    {% for sc1 in semaine5 %}
+                        <input type="text"  name="semaine5_lundi" value="{{ sc1.lundi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine5_lundi">
+                {% endif %}
+            </td>
+
+            </tr>
+            <tr>
+            <td width="76">
+            <p style="margin-left:5px"><strong>Mardi</strong></p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine1 %}
+                    {% for sc1 in semaine1 %}
+                        <input type="text"  name="semaine1_mardi" value="{{ sc1.Mardi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine1_mardi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine2 %}
+                    {% for sc1 in semaine2 %}
+                        <input type="text"  name="semaine2_mardi" value="{{ sc1.Mardi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine2_mardi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine3 %}
+                    {% for sc1 in semaine3 %}
+                        <input type="text"  name="semaine3_mardi" value="{{ sc1.Mardi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine3_mardi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine4 %}
+                    {% for sc1 in semaine4 %}
+                        <input type="text"  name="semaine4_mardi" value="{{ sc1.Mardi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine4_mardi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine5 %}
+                    {% for sc1 in semaine5 %}
+                        <input type="text"  name="semaine5_mardi" value="{{ sc1.Mardi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine5_mardi">
+                {% endif %}
+            </p>
+            </td>
+
+            </tr>
+            <tr>
+            <td width="76">
+            <p style="margin-left:5px"><strong>Mercredi</strong></p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine1 %}
+                    {% for sc1 in semaine1 %}
+                        <input type="text"  name="semaine1_mercredi" value="{{ sc1.Mercredi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine1_mercredi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine2 %}
+                    {% for sc1 in semaine2 %}
+                        <input type="text"  name="semaine2_mercredi" value="{{ sc1.Mercredi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine2_mercredi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine3 %}
+                    {% for sc1 in semaine3 %}
+                        <input type="text"  name="semaine3_mercredi" value="{{ sc1.Mercredi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine3_mercredi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine4 %}
+                    {% for sc1 in semaine4 %}
+                        <input type="text"  name="semaine4_mercredi" value="{{ sc1.Mercredi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine4_mercredi">
+                {% endif %}
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine5 %}
+                    {% for sc1 in semaine1 %}
+                        <input type="text"  name="semaine5_mercredi" value="{{ sc1.Mercredi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine5_mercredi">
+                {% endif %}
+            </p>
+            </td>
+
+            </tr>
+            <tr>
+            <td width="76">
+            <p style="margin-left:5px"><strong>Jeudi</strong></p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine1 %}
+                    {% for sc1 in semaine1 %}
+                        <input type="text"  name="semaine1_jeudi" value="{{ sc1.Jeudi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine1_jeudi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine2 %}
+                    {% for sc1 in semaine2 %}
+                        <input type="text"  name="semaine2_jeudi" value="{{ sc1.Jeudi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine2_jeudi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine3 %}
+                    {% for sc1 in semaine3 %}
+                        <input type="text"  name="semaine3_jeudi" value="{{ sc1.Jeudi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine3_jeudi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine4 %}
+                    {% for sc1 in semaine4 %}
+                        <input type="text"  name="semaine4_jeudi" value="{{ sc1.Jeudi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine4_jeudi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine5 %}
+                    {% for sc1 in semaine5 %}
+                        <input type="text"  name="semaine5_jeudi" value="{{ sc1.Jeudi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine5_jeudi">
+                {% endif %}
+            </p>
+            </td>
+
+            </tr>
+            <tr>
+            <td width="76">
+            <p style="margin-left:5px"><strong>Vendredi </strong></p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine1 %}
+                    {% for sc1 in semaine1 %}
+                        <input type="text"  name="semaine1_vendredi" value="{{ sc1.Vendredi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine1_vendredi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine2 %}
+                    {% for sc1 in semaine2 %}
+                        <input type="text"  name="semaine2_vendredi" value="{{ sc1.Vendredi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine2_vendredi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine3 %}
+                    {% for sc1 in semaine3 %}
+                        <input type="text"  name="semaine3_vendredi" value="{{ sc1.Vendredi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine3_vendredi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine4 %}
+                    {% for sc1 in semaine4 %}
+                        <input type="text"  name="semaine4_vendredi" value="{{ sc1.Vendredi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine4_vendredi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine5 %}
+                    {% for sc1 in semaine5 %}
+                        <input type="text"  name="semaine5_vendredi" value="{{ sc1.Vendredi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine5_vendredi">
+                {% endif %}
+            </p>
+            </td>
+
+            </tr>
+            <tr>
+            <td width="76">
+            <p style="margin-left:5px"><strong>Samedi </strong></p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine1 %}
+                    {% for sc1 in semaine1 %}
+                        <input type="text"  name="semaine1_samedi" value="{{ sc1.Samedi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine1_samedi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine2 %}
+                    {% for sc1 in semaine2 %}
+                        <input type="text"  name="semaine2_samedi" value="{{ sc1.Samedi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine2_samedi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine3 %}
+                    {% for sc1 in semaine3 %}
+                        <input type="text"  name="semaine3_samedi" value="{{ sc1.Samedi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine3_samedi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine4 %}
+                    {% for sc1 in semaine4 %}
+                        <input type="text"  name="semaine4_samedi" value="{{ sc1.Samedi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine4_samedi">
+                {% endif %}
+            </p>
+            </td>
+            <td width="70">
+            <p style="margin-left:5px">
+                {% if semaine5 %}
+                    {% for sc1 in semaine5 %}
+                        <input type="text"  name="semaine5_samedi" value="{{ sc1.Samedi_modif|default_if_none:"" }}">
+                    {% endfor %}
+                {% else %}
+                    <input type="text" name="semaine5_samedi">
+                {% endif %}
+            </p>
+            </td>
+
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <div style="margin:10px 0px 0px 700px; padding: 0px 0px 20px 0px; line-height: 6px;">
+            <p><span  style="color:#2E2EFE;"><strong>Total des heures : </strong></span><input type="number" step="0.01" name="total" value="{{ count_horaire }}"></p>
+            <small id="emailHelp" class="form-text text-muted">03h30 est exprimé par 3.5 et  7h avec un  7 </small>
+
+        </div>
+        </div>
+        <div style="margin-left: 935px;">
+            <button  type="submit"  target="_blank" class="btn btn-default" style="padding: 6px 25px 6px 25px;"><i class="fa fa-floppy-o" style="padding: 0px 3px 0px 3px;"></i>  Enregistrer</button>
+        </form>
+        </div>
+    {% endblock %}
+<!-- jQuery 2.2.3 -->
+{% block script %}
+
+{% endblock %}
+</body>
+</html>

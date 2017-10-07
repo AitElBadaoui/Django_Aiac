@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Emploi du temps</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="bootstrap.min.css"/>
+    <style>
+        *{
+                line-height:2px;
+        }
+		table {
+ 			border-collapse:collapse;
+
+ 				}
+		td {
+             border-width:1px;
+             border-style:solid;
+             border-color:black;
+             padding-top: 1px;
+             padding-bottom: 1px;
+		 }
+
+        @page  {
+            font-family: 'Raleway';
+            size: landscape;
+            margin-top: 10px;
+            margin-left: 60px;
+            margin-right: 60px;
+        }
+        #lmadani{
+            font-family:'Century Gothic';
+        }
+        h1.kaw{
+            font-family: 'BernhardMod BT Bold';
+            font-size: 15px;
+        }
+        td.border-fat{
+            border-top-width: 3px;
+        }
+        td.border-fat-left{
+            border-left-width: 3px;
+        }
+        td.border-fat-right{
+            border-right-width: 3px;
+        }
+        td.border-fat-bottom{
+           border-bottom-width: 3px;
+        }
+        td.mat{
+
+            padding: 7px 0px 7px;
+        }
+        td.head{
+            padding:4px 0 2px;
+        }
+        td.vide{
+            border : 0;
+        }
+	</style>
+
+</head>
+<body>
+    <strong><h3 align="right">AIAC.PR01.E.018/01</h3></strong>
+    <strong><h1 class="kaw"><center>Académie Internationale Mohammed VI de l'Aviation Civile</center></h1></strong>
+    <p><strong><h2><center><em>Direction Adjointe Chargée des Etudes</em></center></h2></strong></p>
+    <center><p style="font-family:'Raleway SemiBold';font-size: 18px;"><strong>EMPLOI DU TEMPS</strong> &nbsp;&nbsp;&nbsp;&nbsp;Du &nbsp;{{ emploi.dateDebut|date:"d/m/Y" }}&nbsp;&nbsp;&nbsp;Au &nbsp;{{ emploi.dateFin|date:"d/m/Y" }}</p></center>
+    <h2>PROMOTION&nbsp;: {{ emploi.semestre.promotion.libelle|upper }}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NIVEAU&nbsp;
+        : {{ level }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ANNEE UNIVERSITAIRE : {{ emploi.semestre.annee_universitaire|upper }}</h2>
+    <table >
+        <tbody>
+            <tr>
+            <td colspan="2" width="163" height="300" class="vide" class="head">
+                <p><strong>SEMAINE&nbsp;:S {{ emploi.semaine.num_semaine }}</strong></p>
+            </td>
+            <td width="189" height="300" class="head">
+            <p><center><strong>S1&nbsp;: 08H30 - 10H15</strong></center></p>
+            </td>
+            <td width="189" height="300" class="head ">
+            <p><center><strong>S2&nbsp;: 10H30 - 12H15</strong></center></p>
+            </td>
+            <td width="189" height="300" class="head border-fat-left">
+            <p><center><strong>S3&nbsp;: 13H45 - 15H30</strong></center></p>
+            </td>
+            <td width="189" height="300" class="head">
+            <p><center><strong>S4&nbsp;: 15H45 - 17H30</strong></center></p>
+            </td>
+            </tr>
+            <tr>
+            <td rowspan="4" width="75" class="border-fat border-fat-left">
+            <p><center><strong>LUNDI</strong></center></p>
+            </td>
+            <td width="88" class="mat border-fat ">
+            <p><em><center>Matière</center></em></p>
+            </td>
+            <td colspan="2" width="378" class="mat border-fat" id="seance1" {% if not seance1.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><center><strong >
+                {% if seance1.matiere|stringformat:"s"  == "ACTIVITEE PARASCOLAIRE" %}
+                {{ seance1.activite }}
+                {% else %}
+                    {{ seance1.matiere|default_if_none:"" }}
+                {% endif %}
+            </strong></center></p>
+            </td>
+            <td colspan="2" width="378" class="mat border-fat-left border-fat-right border-fat" {% if not seance2.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><strong><center>
+                {% if seance2.matiere|stringformat:"s"  == "ACTIVITEE PARASCOLAIRE" %}
+                {{ seance2.activite }}
+                {% else %}
+                    {{ seance2.matiere|default_if_none:"" }}
+                {% endif %}
+
+            </center></strong></p>
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><em><center>Intervenant(s)</center></em></p>
+            </td>
+            <td colspan="2" width="378" {% if not seance1.matiere %} style="background-color: #848484;" {% endif %}>
+            {% if not seance1.is_two %}
+            <p><strong><center>
+                {% for seance in seance1.professeur_firstgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+            </center></strong></p>
+            {% else %}
+                <p><strong><center>GROUPE1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                GROUPE2
+                </center></strong></p>
+            {% endif %}
+            </td>
+            <td colspan="2" width="378" class="border-fat-left border-fat-right" {% if not seance2.matiere %} style="background-color: #848484;" {% endif %}>
+             {% if not seance2.is_two %}
+                <p><strong><center>
+                    {% for seance in seance2.professeur_firstgroup.all %}
+                       {{ seance}}{% include 'utils/slash.html' %}
+                    {% endfor %}
+                </center></strong></p>
+            {% else %}
+                <p><strong><center>GROUPE1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                GROUPE2
+                </center></strong></p>
+            {% endif %}
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><em><center>Salle</center></em></p>
+            </td>
+            <td colspan="2" width="378" {% if not seance1.matiere %} style="background-color: #848484;" {% endif %}>
+            {% if not seance1.is_two %}
+                <p><strong><center>{{ seance1.salle|default_if_none:"" }}</center></strong></p>
+            {% else %}
+                <p><strong><center>
+
+                    {% for seance in seance1.professeur_firstgroup.all %}
+                        {{ seance}}{% include 'utils/slash.html' %}
+
+                    {% endfor %}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% for seance in seance1.professeur_secondgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+                </center></strong></p>
+            {% endif %}
+            </td>
+            <td colspan="2" width="378" class="border-fat-left border-fat-right" {% if not seance2.matiere %} style="background-color: #848484;" {% endif %}>
+                {% if not seance2.is_two %}
+                <p><strong><center>{{ seance2.salle|default_if_none:"" }}</center></strong></p>
+            {% else %}
+                <p><strong><center>
+                    <div style="width: 40% ; display: inline-block;">
+                    {% for seance in seance2.professeur_firstgroup.all %}
+                        {{ seance}}{% include 'utils/slash.html' %}
+
+                    {% endfor %}
+                    </div>
+                <div style="width: 10%; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                <div style="width: 40%; display: inline-block;">
+                {% for seance in seance2.professeur_secondgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+                </div>
+                </center></strong></p>
+            {% endif %}
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><center><em>Avancement</em></center></p>
+            </td>
+            <td colspan="2" width="378" {% if not seance1.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><center><strong>{{ seance1.avancement|default_if_none:"" }}</strong></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-left border-fat-right" {% if not seance2.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><center><strong>{{ seance2.avancement|default_if_none:"" }}</strong></center></p>
+            </td>
+            </tr>
+            <tr>
+            <td rowspan="4" width="75" class="border-fat border-fat-left">
+            <p><center><strong>MARDI</strong></center></p>
+            </td>
+            <td width="88" class="mat border-fat">
+            <p><center><em>Matière</em></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat border-fat-right"{% if not seance3.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><center><strong>
+                {% if seance3.matiere|stringformat:"s"  == "ACTIVITEE PARASCOLAIRE" %}
+                {{ seance3.activite }}
+                {% else %}
+                    {{ seance3.matiere|default_if_none:"" }}
+                {% endif %}
+            </strong></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat border-fat-right" {% if not seance4.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><center><strong>
+                {% if seance4.matiere|stringformat:"s"  == "ACTIVITEE PARASCOLAIRE" %}
+                {{ seance4.activite }}
+                {% else %}
+                    {{ seance4.matiere|default_if_none:"" }}
+                {% endif %}
+            </strong></center></p>
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><center><em>Intervenant(s)</em></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance3.matiere %} style="background-color: #848484;" {% endif %}>
+            {% if not seance3.is_two %}
+            <p><strong><center>
+                {% for seance in seance3.professeur_firstgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+            </center></strong></p>
+            {% else %}
+                <p><strong><center>GROUPE1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                GROUPE2
+                </center></strong></p>
+            {% endif %}
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance4.matiere %} style="background-color: #848484;" {% endif %}>
+            <!--<p><center><strong><span style="margin-left:40px"> groupe1</span><span style="margin-left:40px"> groupe2</span></strong></center></p> -->
+            {% if not seance4.is_two %}
+            <p><strong><center>
+                {% for seance in seance4.professeur_firstgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+            </center></strong></p>
+            {% else %}
+                <p><strong><center>GROUPE1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                GROUPE2
+                </center></strong></p>
+            {% endif %}
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><em><center>Salle</center></em></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance3.matiere %} style="background-color: #848484;" {% endif %}>
+            {% if not seance3.is_two %}
+                <p><strong><center>{{ seance3.salle|default_if_none:"" }}</center></strong></p>
+            {% else %}
+                <p><strong><center>
+                    {% for seance in seance3.professeur_firstgroup.all %}
+                        {{ seance}}{% include 'utils/slash.html' %}
+
+                    {% endfor %}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% for seance in seance3.professeur_secondgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+                </center></strong></p>
+            {% endif %}
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance4.matiere %} style="background-color: #848484;" {% endif %}>
+                {% if not seance4.is_two %}
+                <p><strong><center>{{ seance4.salle|default_if_none:"" }}</center></strong></p>
+            {% else %}
+                <p><strong><center>
+                    {% for seance in seance4.professeur_firstgroup.all %}
+                        {{ seance}}{% include 'utils/slash.html' %}
+
+                    {% endfor %}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% for seance in seance4.professeur_secondgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+                </center></strong></p>
+            {% endif %}
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><em><center>Avancement</center></em></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance3.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><strong><center>{{ seance3.avancement|default_if_none:"" }}</center></strong></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance4.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><strong><center>{{ seance4.avancement|default_if_none:"" }}</center></strong></p>
+            </td>
+            </tr>
+            <tr>
+            <td rowspan="4" width="75" class="border-fat border-fat-left">
+            <p><strong><center>MERCREDI</center></strong></p>
+            </td>
+            <td width="88" class="mat border-fat">
+            <p><em><center>Matière</center></em></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right border-fat" {% if not seance5.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><strong><center>
+                {% if seance5.matiere|stringformat:"s"  == "ACTIVITEE PARASCOLAIRE" %}
+                {{ seance5.activite }}
+                {% else %}
+                    {{ seance5.matiere|default_if_none:"" }}
+                {% endif %}
+            </center></strong></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right border-fat" {% if not seance6.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><strong><center>
+                {% if seance6.matiere|stringformat:"s"  == "ACTIVITEE PARASCOLAIRE" %}
+                {{ seance6.activite }}
+                {% else %}
+                    {{ seance6.matiere|default_if_none:"" }}
+                {% endif %}
+            </center></strong></p>
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><em><center>Intervenant(s)</center></em></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance5.matiere %} style="background-color: #848484;" {% endif %}>
+            {% if not seance5.is_two %}
+            <p><strong><center>
+                {% for seance in seance5.professeur_firstgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+            </center></strong></p>
+            {% else %}
+                <p><strong><center>GROUPE1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                GROUPE2
+                </center></strong></p>
+            {% endif %}
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance6.matiere %} style="background-color: #848484;" {% endif %}>
+            {% if not seance6.is_two %}
+            <p><strong><center>
+                {% for seance in seance6.professeur_firstgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+            </center></strong></p>
+            {% else %}
+                <p><strong><center>GROUPE1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                GROUPE2
+                </center></strong></p>
+            {% endif %}
+            </td>
+            </tr>
+            <tr>
+            <td width="88" >
+            <p><em><center>Salle</center></em></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance5.matiere %} style="background-color: #848484;" {% endif %}>
+                {% if not seance5.is_two %}
+                <p><strong><center>{{ seance5.salle|default_if_none:"" }}</center></strong></p>
+            {% else %}
+                <p><strong><center>
+                    {% for seance in seance5.professeur_firstgroup.all %}
+                        {{ seance}}{% include 'utils/slash.html' %}
+
+                    {% endfor %}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% for seance in seance5.professeur_secondgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+                </center></strong></p>
+            {% endif %}
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance6.matiere %} style="background-color: #848484;" {% endif %}>
+                {% if not seance6.is_two %}
+                <p><strong><center>{{ seance6.salle|default_if_none:"" }}</center></strong></p>
+            {% else %}
+                <p><strong><center>
+                    {% for seance in seance6.professeur_firstgroup.all %}
+                        {{ seance}}{% include 'utils/slash.html' %}
+
+                    {% endfor %}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% for seance in seance6.professeur_secondgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+                </center></strong></p>
+            {% endif %}
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><em><center>Avancement</center></em></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance5.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><strong><center>{{ seance5.avancement|default_if_none:"" }}</center></strong></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance6.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><strong><center>{{ seance6.avancement|default_if_none:"" }}</center></strong></p>
+            </td>
+            </tr>
+            <tr>
+            <td rowspan="4" width="75" class="border-fat-left border-fat ">
+            <p><strong><center>JEUDI</center></strong></p>
+            </td>
+            <td width="88" class="mat border-fat">
+            <p><em><center>Matière</center></em></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right border-fat" {% if not seance7.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><strong><center>
+                {% if seance7.matiere|stringformat:"s"  == "ACTIVITEE PARASCOLAIRE" %}
+                {{ seance7.activite }}
+                {% else %}
+                    {{ seance7.matiere|default_if_none:"" }}
+                {% endif %}
+            </center></strong></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right border-fat" {% if not seance8.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><center><strong>
+                {% if seance8.matiere|stringformat:"s"  == "ACTIVITEE PARASCOLAIRE" %}
+                {{ seance8.activite }}
+                {% else %}
+                    {{ seance8.matiere|default_if_none:"" }}
+                {% endif %}
+            </strong></center></p>
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><center><em>Intervenant(s)</em></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance7.matiere %} style="background-color: #848484;" {% endif %}>
+                {% if not seance7.is_two %}
+            <p><strong><center>
+                {% for seance in seance7.professeur_firstgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+            </center></strong></p>
+            {% else %}
+                <p><strong><center>GROUPE1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                GROUPE2
+                </center></strong></p>
+            {% endif %}
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance8.matiere %} style="background-color: #848484;" {% endif %}>
+                {% if not seance8.is_two %}
+            <p><strong><center>
+                {% for seance in seance8.professeur_firstgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+            </center></strong></p>
+            {% else %}
+                <p><strong><center>GROUPE1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                GROUPE2
+                </center></strong></p>
+            {% endif %}
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><center><em>Salle</em></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance7.matiere %} style="background-color: #848484;" {% endif %}>
+                        {% if not seance7.is_two %}
+                <p><strong><center>{{ seance7.salle|default_if_none:"" }}</center></strong></p>
+            {% else %}
+                <p><strong><center>
+                    {% for seance in seance7.professeur_firstgroup.all %}
+                        {{ seance}}{% include 'utils/slash.html' %}
+
+                    {% endfor %}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% for seance in seance7.professeur_secondgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+                </center></strong></p>
+            {% endif %}
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance8.matiere %} style="background-color: #848484;" {% endif %}>
+                        {% if not seance8.is_two %}
+                <p><strong><center>{{ seance8.salle|default_if_none:"" }}</center></strong></p>
+            {% else %}
+                <p><strong><center>
+                    {% for seance in seance8.professeur_firstgroup.all %}
+                        {{ seance}}{% include 'utils/slash.html' %}
+
+                    {% endfor %}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% for seance in seance8.professeur_secondgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+                </center></strong></p>
+            {% endif %}
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><center><em>Avancement</em></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance7.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><center><strong>{{ seance7.avancement|default_if_none:"" }}</strong></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance8.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><center><strong>{{ seance8.avancement|default_if_none:"" }}</strong></center></p>
+            </td>
+            </tr>
+            <tr>
+            <td rowspan="4" width="75" class="border-fat border-fat-left">
+            <p><center><strong>VENDREDI</strong></center></p>
+            </td>
+            <td width="88" class="mat border-fat">
+            <p><center><em>Matière</em></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat border-fat-right" {% if not seance9.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><center><strong>
+                {% if seance9.matiere|stringformat:"s"  == "ACTIVITEE PARASCOLAIRE" %}
+                {{ seance9.activite }}
+                {% else %}
+                    {{ seance9.matiere|default_if_none:"" }}
+                {% endif %}
+            </strong></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat border-fat-right" {% if not seance10.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><center><strong>
+                {% if seance10.matiere|stringformat:"s"  == "ACTIVITEE PARASCOLAIRE" %}
+                {{ seance10.activite }}
+                {% else %}
+                    {{ seance10.matiere|default_if_none:"" }}
+                {% endif %}
+            </strong></center></p>
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><center><em>Intervenant(s)</em></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance9.matiere %} style="background-color: #848484;" {% endif %}>
+            {% if not seance9.is_two %}
+            <p><strong><center>
+                {% for seance in seance9.professeur_firstgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+            </center></strong></p>
+            {% else %}
+                <p><strong><center>GROUPE1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                GROUPE2
+                </center></strong></p>
+            {% endif %}
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance10.matiere %} style="background-color: #848484;" {% endif %}>
+            {% if not seance10.is_two %}
+            <p><strong><center>
+                {% for seance in seance10.professeur_firstgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+            </center></strong></p>
+            {% else %}
+                <p><strong><center>GROUPE1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                GROUPE2
+                </center></strong></p>
+            {% endif %}
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><center><em>Salle</em></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance9.matiere %} style="background-color: #848484;" {% endif %}>
+                        {% if not seance9.is_two %}
+                <p><strong><center>{{ seance9.salle|default_if_none:"" }}</center></strong></p>
+            {% else %}
+                <p><strong><center>
+                    {% for seance in seance9.professeur_firstgroup.all %}
+                        {{ seance}}{% include 'utils/slash.html' %}
+
+                    {% endfor %}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% for seance in seance9.professeur_secondgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+                </center></strong></p>
+            {% endif %}
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance10.matiere %} style="background-color: #848484;" {% endif %}>
+                        {% if not seance10.is_two %}
+                <p><strong><center>{{ seance10.salle|default_if_none:"" }}</center></strong></p>
+            {% else %}
+                <p><strong><center>
+                    {% for seance in seance10.professeur_firstgroup.all %}
+                        {{ seance}}{% include 'utils/slash.html' %}
+
+                    {% endfor %}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% for seance in seance10.professeur_secondgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+                </center></strong></p>
+            {% endif %}
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><center><em>Avancement</em></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance9.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><center><strong>{{ seance9.avancement|default_if_none:"" }}</strong></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance10.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><center><strong>{{ seance10.avancement|default_if_none:"" }}</strong></center></p>
+            </td>
+            </tr>
+            <tr>
+            <td rowspan="4" width="75" class=" border-fat border-fat-left border-fat-bottom">
+            <p><center><strong>SAMEDI</strong></center></p>
+            </td>
+            <td width="88" class="mat border-fat">
+            <p><center><em>Mati&egrave;re</em></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat border-fat-right" {% if not seance11.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><center><strong>
+
+                {% if seance11.matiere|stringformat:"s"  == "ACTIVITEE PARASCOLAIRE" %}
+                {{ seance11.activite }}
+                {% else %}
+                    {{ seance11.matiere|default_if_none:"" }}
+                {% endif %}
+                &nbsp;</strong></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat border-fat-right" {% if not seance12.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><center><strong>
+                {% if seance12.matiere|stringformat:"s"  == "ACTIVITEE PARASCOLAIRE" %}
+                {{ seance12.activite }}
+                {% else %}
+                    {{ seance12.matiere|default_if_none:"" }}
+                {% endif %}
+            </strong></center></p>
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><center><em>Intervenant(s)</em></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance11.matiere %} style="background-color: #848484;" {% endif %}>
+            {% if not seance11.is_two %}
+            <p><strong><center>
+                {% for seance in seance11.professeur_firstgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+            </center></strong></p>
+            {% else %}
+                <p><strong><center>GROUPE1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                GROUPE2
+                </center></strong></p>
+            {% endif %}
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance12.matiere %} style="background-color: #848484;" {% endif %}>
+            {% if not seance12.is_two %}
+            <p><strong><center>
+                {% for seance in seance12.professeur_firstgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+            </center></strong></p>
+            {% else %}
+                <p><strong><center>GROUPE1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                GROUPE2
+                </center></strong></p>
+            {% endif %}
+            </td>
+            </tr>
+            <tr>
+            <td width="88">
+            <p><center><em>Salle</em></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance11.matiere %} style="background-color: #848484;" {% endif %}>
+                {% if not seance11.is_two %}
+                <p><strong><center>{{ seance11.salle|default_if_none:"" }}</center></strong></p>
+            {% else %}
+                <p><strong><center>
+                    {% for seance in seance11.professeur_firstgroup.all %}
+                        {{ seance}}{% include 'utils/slash.html' %}
+
+                    {% endfor %}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% for seance in seance1.professeur_secondgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+                </center></strong></p>
+            {% endif %}
+            </td>
+            <td colspan="2" width="378" class="border-fat-right" {% if not seance12.matiere %} style="background-color: #848484;" {% endif %}>
+                        {% if not seance12.is_two %}
+                <p><strong><center>{{ seance12.salle|default_if_none:"" }}</center></strong></p>
+            {% else %}
+                <p><strong><center>
+                    {% for seance in seance12.professeur_firstgroup.all %}
+                        {{ seance}}{% include 'utils/slash.html' %}
+                    {% endfor %}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% for seance in seance12.professeur_secondgroup.all %}
+                   {{ seance}}{% include 'utils/slash.html' %}
+
+                {% endfor %}
+                </center></strong></p>
+            {% endif %}
+            </td>
+            </tr>
+            <tr>
+            <td width="88" class="border-fat-bottom">
+            <p><center><em>Avancement</em></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right border-fat-bottom" {% if not seance11.matiere %} style="background-color: #848484;" {% endif %}>
+            <p><center><strong>{% if not seance11.matiere %}  {% else %} {{ seance11.seance|default_if_none:""  }}{% endif %}</strong></center></p>
+            </td>
+            <td colspan="2" width="378" class="border-fat-right border-fat-bottom" {% if not seance12.matiere %} style="background-color: #848484 ;" {% endif %}>
+                <p><center><strong>{% if not seance12.matiere %}  {% else %} {{ seance12.seance|default_if_none:""  }}{% endif %}</strong></center></p>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+    <strong><em>&nbsp;<br>&nbsp; <u>NB</u>&nbsp;: Les s&eacute;ances de cours peuvent inclure des contrôles inopinés<span style="margin-left:40px">&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Code Emploi</span>&nbsp;: {{ emploi.codeEmploi }}</em></strong>
+</body>
+</html>

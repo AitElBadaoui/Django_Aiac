@@ -1,0 +1,29 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>index</title>
+<link rel="stylesheet"  type="text/css" href="{% static 'css/jquery.multiselect.css' %}">
+ 
+</head>
+<body>
+<form name="yow" method="POST" action="{{ url }}">
+
+{% csrf_token %}
+{{ seance1.as_p }}<hr>
+    <br>
+    <hr>
+    {{ seance2.as_p }}
+    <hr>
+    <hr>
+    {{ seance3.as_p }}
+</div>
+<input type="submit" name="submit" value="enreg dans la base de tebi">
+</form>
+</body>
+<script src="{% static  'js/jQuery/jquery-2.2.3.min.js'%}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.multiselect.js' %}"></script>
+<script type="text/javascript">
+      $('select[multiple]').multiselect();
+</script>
+</html>

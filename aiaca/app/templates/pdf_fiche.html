@@ -1,0 +1,175 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fiche Etudiant</title>
+    <style>
+        body{
+            font-size: 13px;
+        }
+
+        .laps{
+            padding-top: 5px;
+            margin-bottom: 5px;
+        }
+        .second{
+            padding-top: 1px;
+            line-height: 1px;
+        }
+        .foot{
+            padding-top: 7px;
+            margin-bottom: 7px;
+        }
+        @page {
+            margin-left: 30px;
+        }
+        .head{
+            font-size: 18px;
+        }
+    </style>
+</head>
+<div>
+
+        <div class="head">
+        <p>
+            <center><u>Acad&eacute;mie Internationale Mohammed VI de l'Aviation Civile</u></center></p>
+        </div>
+        <br><br>
+        <div style="">
+            <hr  color="#585858" width="50%" style="line-height: 2px;">
+            <p><div style=" margin-left: 250px;line-height: 2px;"><i><h1>FICHE DE RENSEIGNEMENT</h1></i></div></p>
+            <hr color="#585858" width="50%" style="line-height: 2px;">
+        </div>
+        <br>
+
+        <div style=" margin-left: 290px;"><img src={{ tag }} width="200px" height="250px" ></div>
+    <br><br>
+        <table width="540" style="border: 1px double black;">
+                            <tbody>
+                            <tr class="laps">
+                                <td width="290">
+                                <p style="margin-left: 10px;"><strong>Nom :{{ etudiant.nom|default_if_none:""  }}</strong>&nbsp;</p>
+                                </td>
+                                <td colspan="2" width="150">
+                                    <p style="margin-left: 10px;"><strong>Pr&eacute;nom &nbsp;: {{ etudiant.prenom|default_if_none:""  }}</strong></p>
+                                </td>
+                                <td colspan="2" width="300">
+                                    <p style="margin-left: 10px;"><strong>Date et lieu de naissance :<br> {{ etudiant.date_naissance|date:"d/m/y"|default_if_none:"" }} {{ etudiant.lieu_naissance|default_if_none:""  }}</strong></p>
+                                </td>
+                            </tr>
+                            <tr class="second">
+                            <td colspan="2" width="314">
+                            <p style="margin-left: 10px;"><strong>Date d&rsquo;Entr&eacute;e &agrave; l&rsquo;AIAC : {{ etudiant.date_entree|default_if_none:""  }}</strong></p>
+                            </td>
+                            <td colspan="3" width="357">
+                            <p style="margin-left: 10px;"><strong>Adresse : {{ etudiant.adresse_residence|default_if_none:""  }}</strong></p>
+                            <p style="margin-left: 10px;"><strong>Adresse mail : {{ etudiant.mail|default_if_none:""  }}</strong></p>
+                            <p style="margin-left: 10px;"><strong>N&deg; Tel : {{ etudiant.tel|default_if_none:""  }}</strong></p>
+                            </td>
+                            </tr>
+                            <tr class="laps">
+                            <td colspan="2" width="314">
+                            <p style="margin-left: 10px;"><strong>N&deg; de&nbsp; la carte stagiaire : {{ etudiant.num_carte_stagiaire|default_if_none:""  }}</strong></p>
+                            </td>
+                            <td colspan="3" width="357">
+                            <p style="margin-left: 10px;"><strong>N&deg; CIN : {{ etudiant.cin|default_if_none:""  }}</strong></p>
+                            </td>
+                            </tr>
+                            <tr>
+                            <td colspan="5" width="674">
+                                <p>&nbsp;<strong><center>&nbsp;Cursus scolaire</center></strong></p>
+                            <div >
+                                <table width="100%"  style="margin-left: 170px;" >
+                            <tbody>
+
+                            <tr class="laps">
+                            <td width="228">
+                            <p style="margin-left: 10px;">Bac :</p>
+                            </td>
+                            <td width="398">
+                                 <p style="margin-left: 10px;">{{ etudiant.bac|default_if_none:"" }}&nbsp;</p>
+                            </td>
+                            </tr>
+                            <tr class="laps">
+                            <td width="228">
+                            <p style="margin-left: 10px;">Mention</p>
+                            </td>
+                            <td width="398">
+                                <p style="margin-left: 10px;"><center>{{ etudiant.mention|default_if_none:"" }}&nbsp;</center></p>
+                            </td>
+                            </tr>
+                            <tr class="laps">
+                            <td width="228">
+                            <p style="margin-left: 10px;">Fili&egrave;re&nbsp;&nbsp; </p>
+                            </td>
+                            <td width="398">
+                                <p style="margin-left: 10px;"><center>{{ etudiant.filiere|default_if_none:"" }}&nbsp;</center></p>
+                            </td>
+                            </tr>
+                            <tr class="laps">
+                            <td width="228">
+                            <p style="margin-left: 10px;">Classement </p>
+                            </td>
+                            <td width="398">
+                                <p style="margin-left: 10px;"><center>{{ etudiant.Classement|default_if_none:"" }}&nbsp;</center></p>
+                            </td>
+                            </tr>
+
+                            <tr class="laps">
+                            <td width="228">
+                            <p style="margin-left: 10px;">Etablissement&nbsp;</p>
+                            </td>
+                            <td width="398">
+                                <p style="margin-left: 10px;"><center>{{ etudiant.etablissement|default_if_none:"" }}&nbsp;</center></p>
+                            </td>
+                            </tr>
+                            </tbody>
+                            </table></div>
+
+                            </td>
+                            </tr>
+                            <tr>
+                            <td colspan="4" width="472" class="laps">
+                            <p style="margin-left: 10px;"><strong>Semestre</strong></p>
+                            </td>
+                            <td width="199">
+                            <p style="margin-left: 10px;"><strong>Date&nbsp; de validation</strong></p>
+                            </td>
+                            </tr>
+                            <tr class="foot">
+                            <td colspan="4" width="472">
+                            <p style="margin-left: 10px;"><strong>Premi&egrave;re ann&eacute;e </strong></p>
+                            </td>
+                            <td width="199">
+                                <p style="margin-left: 10px;">&nbsp;<strong>{{ etudiant.datevalidation_premiere_annee|default_if_none:""  }}</strong></p>
+
+                            </td>
+                            </tr>
+                            <tr class="foot">
+                            <td colspan="4" width="472" class="laps">
+                            <p style="margin-left: 10px;"><strong>Semestre 3</strong></p>
+                            </td>
+                            <td width="199">
+                                <p style="margin-left: 10px;">&nbsp;<strong>{{ etudiant.datevalidation_s3|default_if_none:"" }}</strong></p>
+
+                            </td>
+                            </tr>
+                            <tr class="foot">
+                            <td colspan="4" width="472" class="laps">
+                            <p style="margin-left: 10px;"><strong>Deuxi&egrave;me ann&eacute;e </strong></p>
+                            </td>
+                            <td width="199">
+                                <p style="margin-left: 10px;">&nbsp;<strong>{{ etudiant.datevalidation_deuxieme_annee|default_if_none:""  }}</strong></p>
+                            </td>
+                            </tr>
+                            </tbody>
+                        </table>
+            </div>
+            <div style="margin-left: 590px; margin-top: 190px;font-size: 10px;">
+                AIAC.PR01.E.057/00
+            </div>
+
+
+</body>
+</html>

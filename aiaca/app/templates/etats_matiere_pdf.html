@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        td , th {
+             margin-left: 3px;
+             border-width:1px;
+             border-style:solid;
+             border-color:black;
+             padding-top: 2px;
+             padding-bottom: 1px;
+		 }
+    </style>
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <th>Matière</th>
+            <th>Semestre</th>
+            <th>Professeur</th>
+            <th>Charge</th>
+            <th>Diplome</th>
+        </tr>
+                    {% for mat in list_matiere_prof%}
+                        {% if mat.matiere.libelle != "ACTIVITEE PARASCOLAIRE" %}
+                            <tr>
+                                <td><span style="margin: 10px 0px 10px 0px;">{{ mat.matiere.libelle|default_if_none:"" }}</span></td>
+                                <td width="75">{{ mat.matiere.semestre.libelle|default_if_none:""}}</td>
+                                <td width="280">
+
+                                    {{ mat.prof  |join:" / " }}
+
+                            </td>
+                                <td width="65"><center>{{ mat.matiere.chargeRealise|default_if_none:"0" }}H</center></td>
+                                <td width="135">{{ mat.matiere.semestre.promotion|default_if_none:""|upper }}</td>
+
+                            </tr>
+                        {% else %}
+                            <!--<tr>
+                                <td>{{ mat.libelle|default_if_none:"" }}</td>
+                                <td>{{ mat.semestre.libelle|default_if_none:""}}</td>
+                                <td>{{ mat.semestre.promotion|default_if_none:""|upper }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>-->
+                        {% endif %}
+                    {% endfor %}
+    </table>
+</body>
+</html>

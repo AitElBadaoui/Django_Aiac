@@ -1,0 +1,293 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+  {% block title %}Fiche renseignement{% endblock %}
+    {% block style %}
+      <!-- DataTables -->
+       <link rel="stylesheet" href="{% static '/css/style.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+        <link rel="stylesheet"  type="text/css" href="{% static 'css/jquery.multiselect.css' %}">
+      <!-- Theme style -->
+        <style>
+        select.disa{
+            background-color: #eee;
+        }
+        select.matiere {
+            width: 100%;
+
+            height:30px;
+            border:0px;
+            outline:0px;
+            text-align-last:center;
+
+        }
+        select.prof_supp{
+            width: 50%;
+            height:60px;
+            border:0px;
+            outline:0px;
+            text-align-last:center;
+        }
+        select.professeur{
+            width: 100%;
+            height:60px;
+            border:0px;
+            outline:0px;
+            text-align-last:center;
+        }
+        input[type=text]{
+            width: 100%;
+            height:35px;
+            border:1px #ebebeb solid;
+            text-align: center;
+        }
+        </style>
+    {% endblock %}
+    {% block header %}
+        <br><br>
+    {% endblock %}
+        {% block menu %}
+        <li class="active">
+          <a href="{% url 'index' %}">
+            <i class="fa fa-home "></i> <span>Accueil</span>
+          </a>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-calendar"></i> <span>Emploi du Temps</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'emploi_courant' %}"><i class="fa fa-circle-o"></i> Courant</a></li>
+            <li class=""><a href="{% url 'emploi_courant_archive' %}"><i class="fa fa-circle-o"></i> Archivés</a></li>
+          </ul>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-book"></i> <span>Matières</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'matiere' %}"><i class="fa fa-circle-o"></i> Lister</a></li>
+            <li class=""><a href="http://127.0.0.1:8000/admin/app/matiere/"><i class="fa fa-circle-o text-aqua"></i> Gérer</a></li>
+          </ul>
+        </li>
+        <li class=" treeview active">
+          <a href="#">
+            <i class="fa fa-graduation-cap"></i> <span>Etudiants</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active"><a href="{% url 'gestion_etudiant' %}"><i class="fa fa-circle-o"></i> Lister</a></li>
+            <li class=""><a href="http://127.0.0.1:8000/admin/app/etudiant/"><i class="fa fa-circle-o text-aqua"></i> Gérer</a></li>
+          </ul>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-suitcase"></i> <span>Professeurs</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'prof' %}"><i class="fa fa-circle-o"></i> Lister</a></li>
+            <li class=""><a href="http://127.0.0.1:8000/admin/app/professeur/"><i class="fa fa-circle-o text-aqua"></i> Gérer</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-address-book"></i> <span>Répertoire téléphonique</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{% url 'repertoire_prof' %}"><i class="fa fa-circle-o"></i> Professeurs</a></li>
+            <li><a href="{% url 'repertoire_etud' %}"><i class="fa fa-circle-o"></i> Etudiants</a></li>
+          </ul>
+        </li>
+                    <li>
+        <a href="{% url 'tuto' %}">
+            <i class="fa fa-newspaper-o"></i> <span>Mode d'emploi</span>
+        </a>
+        </li>
+    {% endblock %}
+    {% block  breadcrumb%}
+        <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+        <li class="active">Emploi du temps courant</li>
+    {% endblock %}
+    {% block content %}
+      <div class="row">
+      {% csrf_token %}
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-lg-offset-2 col-lg-8 text-center ">
+
+                    <p><strong><center>Acad&eacute;mie Internationale Mohammed VI de l'Aviation Civile</center></strong></p>
+                    <p><center><h2>FICHE DE RENSEIGNEMENT</h2></center></p>
+                    <p>&nbsp;</p>
+                </div>
+            </div>
+            <br>
+
+
+          <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body">
+                <form action="profile/" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="path" class="hidden" value="{{ request.path }}"/>
+
+<table width="900" border="1" style="margin:auto">
+<tbody>
+<tr>
+<td width="290">
+<p style="margin-left: 10px;"><strong>Nom :{{ etudiant.nom|default_if_none:"" }}</strong>&nbsp;
+</td></p>
+</td>
+<td colspan="2" width="150">
+<p style="margin-left: 10px;"><strong>Pr&eacute;nom &nbsp;: {{ etudiant.prenom|default_if_none:"" }}</strong></p>
+</td>
+<td colspan="2" width="300">
+<p style="margin-left: 10px;"><strong>Date et lieu de naissance :<br> {{ etudiant.date_naissance|date:"d/m/y" |default_if_none:""}} {{ etudiant.lieu_naissance|default_if_none:"" }}</strong></p>
+</td>
+</tr>
+<tr>
+<td colspan="2" width="314">
+<p style="margin-left: 10px;"><strong>Date d&rsquo;Entr&eacute;e &agrave; l&rsquo;AIAC : {{ etudiant.date_entree|default_if_none:"" }}</strong></p>
+</td>
+<td colspan="3" width="357">
+<p style="margin-left: 10px;"><strong>Adresse : {{ etudiant.adresse_residence|default_if_none:"" }}</strong></p>
+<p style="margin-left: 10px;"><strong>Adresse mail : {{ etudiant.mail|default_if_none:"" }}</strong></p>
+<p style="margin-left: 10px;"><strong>N&deg; Tel : {{ etudiant.tel|default_if_none:"" }}</strong></p>
+</td>
+</tr>
+<tr>
+<td colspan="2" width="314">
+<p style="margin-left: 10px;"><strong>N&deg; de&nbsp; la carte stagiaire : {{ etudiant.num_carte_stagiaire|default_if_none:"" }}</strong></p>
+</td>
+<td colspan="3" width="357">
+<p style="margin-left: 10px;"><strong>N&deg; CIN : {{ etudiant.cin|default_if_none:"" }}</strong></p>
+</td>
+</tr>
+<tr>
+<td colspan="5" width="674">
+    <p style="margin-top: -10px">&nbsp;<strong><center>&nbsp;Cursus scolaire</center></strong></p>
+    <table width="95%" border="1" style="margin-left: 20px; margin-bottom: 30px">
+        <tbody>
+            <tr>
+            <td width="228">
+            <p style="margin-left: 10px;"><strong>Bac </strong></p>
+            </td>
+            <td width="398">
+                <p style="margin-left: 10px;"><strong>&nbsp;{{ etudiant.bac|default_if_none:"" }}</strong></p>
+            </td>
+            </tr>
+            <tr>
+                         <tr>
+            <td width="228">
+            <p style="margin-left: 10px;"><strong>Mention</strong></p>
+            </td>
+            <td width="398">
+                <p style="margin-left: 10px;">&nbsp;<strong>{{ etudiant.mention|default_if_none:"" }}</strong></p>
+            </td>
+            </tr>
+            <tr>
+            <td width="228">
+            <p style="margin-left: 10px;"><strong>Fili&egrave;re&nbsp;&nbsp; </strong></p>
+            </td>
+            <td width="398">
+                <p style="margin-left: 10px;"><strong>{{ etudiant.filiere|default_if_none:"" }}&nbsp;</strong></p>
+            </td>
+            </tr>
+                        <tr>
+            <td width="228">
+            <p style="margin-left: 10px;"><strong>Classement&nbsp;&nbsp; </strong></p>
+            </td>
+            <td width="398">
+                <p><strong style="margin-left: 10px;">&nbsp;{{ etudiant.Classement|default_if_none:"" }}</strong></p>
+            </td>
+            </tr>
+            <tr>
+            <td width="228">
+            <p style="margin-left: 10px;"><strong>Etablissement&nbsp;</strong></p>
+            </td>
+            <td width="398">
+                <p style="margin-left: 10px;">&nbsp;<strong>{{ etudiant.etablissement|default_if_none:"" }}</strong></p>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</td>
+</tr>
+<tr>
+<td colspan="4" width="472">
+<p style="margin-left: 10px;"><strong>Semestre</strong></p>
+</td>
+<td width="199">
+<p style="margin-left: 10px;"><strong>Date&nbsp; de validation</strong></p>
+</td>
+</tr>
+<tr>
+<td colspan="4" width="472">
+<p style="margin-left: 10px;"><strong>Premi&egrave;re ann&eacute;e </strong></p>
+</td>
+<td width="199">
+    <p style="margin-left: 10px;">&nbsp;<strong>{{ etudiant.datevalidation_premiere_annee|default_if_none:"" }}</strong></p>
+<p>&nbsp;</p>
+</td>
+</tr>
+<tr>
+<td colspan="4" width="472">
+<p style="margin-left: 10px;"><strong>Semestre 3</strong></p>
+</td>
+<td width="199">
+    <p style="margin-left: 10px;">&nbsp;<strong>{{ etudiant.datevalidation_s3|default_if_none:""}}</strong></p>
+<p>&nbsp;</p>
+</td>
+</tr>
+<tr>
+<td colspan="4" width="472">
+<p style="margin-left: 10px;"><strong>Deuxi&egrave;me ann&eacute;e </strong></p>
+</td>
+<td width="199">
+    <p style="margin-left: 10px;">&nbsp;<strong>{{ etudiant.datevalidation_deuxieme_annee|default_if_none:"" }}</strong></p>
+<p>&nbsp;</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+                    <br>
+                    <button class="btn btn-success" action="submit" style="margin-left: 855px;"><i class="fa fa-download"></i> Générer le PDF</button>
+
+                </form>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+
+
+{% endblock %}
+<!-- jQuery 2.2.3 -->
+{% block script %}
+    <script type="text/javascript" src="{% static 'js/jquery.multiselect.js' %}"></script>
+    <script>$('select[multiple]').multiselect();
+    //$('button').not('.btn-success').attr('disabled',true)
+    </script>
+    <script type="application/javascript" src="{% static '/js/emploi_courant.js' %}"></script>
+{% endblock %}
+</body>
+</html>

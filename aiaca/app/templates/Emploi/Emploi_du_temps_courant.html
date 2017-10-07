@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+  {% block title %}ICNA | Emploi Courant{% endblock %}
+    {% block style %}
+      <!-- DataTables -->
+       <link rel="stylesheet" href="{% static '/css/dataTables.bootstrap.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+      <!-- Theme style -->
+    {% endblock %}
+    {% block header %}
+            <h1 style="color:#23527c ;margin-left: 10px;">
+            <br>
+        Emploi du temps en cours
+
+        </h1>
+        <br><br>
+    {% endblock %}
+        {% block menu %}
+        <li>
+          <a href="{% url 'index' %}">
+            <i class="fa fa-home "></i> <span>Accueil</span>
+          </a>
+        </li>
+        <li class=" treeview active">
+          <a href="#">
+            <i class="fa fa-calendar"></i> <span>Emploi du Temps</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active"><a href="{% url 'emploi_courant' %}"><i class="fa fa-circle-o"></i> Courant</a></li>
+            <li class=""><a href="{% url 'emploi_courant_archive' %}"><i class="fa fa-circle-o"></i> Archivés</a></li>
+          </ul>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-book"></i> <span>Matières</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'matiere' %}"><i class="fa fa-circle-o"></i> Lister</a></li>
+            <li class=""><a href="http://127.0.0.1:8000/admin/app/matiere/"><i class="fa fa-circle-o text-aqua"></i> Gérer</a></li>
+          </ul>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-graduation-cap"></i> <span>Etudiants</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'gestion_etudiant' %}"><i class="fa fa-circle-o"></i> Lister</a></li>
+            <li class=""><a href="http://127.0.0.1:8000/admin/app/etudiant/"><i class="fa fa-circle-o text-aqua"></i> Gérer</a></li>
+          </ul>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-suitcase"></i> <span>Professeurs</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'prof' %}"><i class="fa fa-circle-o"></i> Lister</a></li>
+            <li class=""><a href="http://127.0.0.1:8000/admin/app/professeur/"><i class="fa fa-circle-o text-aqua"></i> Gérer</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-address-book"></i> <span>Répertoire téléphonique</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{% url 'repertoire_prof' %}"><i class="fa fa-circle-o"></i> Professeurs</a></li>
+            <li><a href="{% url 'repertoire_etud' %}"><i class="fa fa-circle-o"></i> Etudiants</a></li>
+          </ul>
+        </li>
+            <li>
+        <a href="{% url 'tuto' %}">
+            <i class="fa fa-newspaper-o"></i> <span>Mode d'emploi</span>
+        </a>
+        </li>
+    {% endblock %}
+    {% block  breadcrumb%}
+        <li><a href="{% url 'index' %}"><i class="fa fa-home"></i> Accueil</a></li>
+        <li class="active">Emploi du temps courant</li>
+    {% endblock %}
+    {% block content %}
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th>Promotions</th>
+                  <th>Semestre</th>
+                  <th>Semaine</th>
+                  <th>Date Début</th>
+                  <th>Date Fin</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for emp in emploi%}
+                    <tr>
+
+                         <td><a href="/emploi_du_temps/{{emp.semestre.promotion}}/{{ emp.semestre.libelle }}/{{ emp.semaine.num_semaine }}">{{ emp.semestre.promotion }}</a></td>
+                         <td>{{ emp.semestre.libelle}}</td>
+                         <td>Semaine {{ emp.semaine.num_semaine }}</td>
+                         <td>{{ emp.dateDebut|date:'d-m-Y' }}</td>
+                         <td>{{ emp.dateFin|date:'d-m-Y' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+
+
+{% endblock %}
+<!-- jQuery 2.2.3 -->
+{% block script %}
+<script src="{% static '/js/plugins/jQuery/jquery-2.2.3.min.js'%}"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="{% static '/js/bootstrap.min.js'%}"></script>
+<!-- DataTables -->
+<script src="{% static '/js/plugins/datatables/jquery.dataTables.min.js'%}"></script>
+<script src="{% static '/js/plugins/datatables/dataTables.bootstrap.min.js'%}"></script>
+<!-- SlimScroll -->
+<script src="{% static '/js/plugins/slimScroll/jquery.slimscroll.min.js' %}"></script>
+<!-- FastClick -->
+<script src="{% static '/js/plugins/fastclick/fastclick.js'%}"></script>
+<!-- AdminLTE App -->
+<script src="{% static '/js/dist/js/app.min.js'%}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{% static '/js/dist/js/demo.js'%}"></script>
+    <script src="{% static '/js/translate.js'%}"></script>
+<!-- page script -->
+<script>
+  $(function () {
+    $("#example1").DataTable();
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false
+    });
+  });
+</script>
+{% endblock %}
+</body>
+</html>

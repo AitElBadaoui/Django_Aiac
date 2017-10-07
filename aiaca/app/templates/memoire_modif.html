@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+{% load filtre %}
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mémoire de facturation</title>
+    <style>
+
+        body{
+            font-family: 'PT Serif', serif;
+            font-size: 14px;
+        }
+        .tab{
+            padding-to: 2px;
+            padding-top: 3px;
+        }
+        .semaine{
+            padding-top: 2px;
+            padding-bottom: 5px;
+        }
+        .head{
+            font-family: 'PT Serif', serif;
+            font-size: 19px;
+
+        }
+        .info{
+            line-height: 25px;
+        }
+        @page{
+            margin-left: 50px;
+        }
+    </style>
+</head>
+<body>
+<br><br> <br>   <div style="margin-left: 35px;">
+                <img src="C:\Users\Midoki\Documents\Python\aiac_icna\app\static\img\header.png"/>
+            </div>
+
+<br>
+           <div class="head">
+               <center><p><u>Mémoire des sommes dues pour vacations</u></p></center>
+           </div>
+           <br>
+            <div style="margin-left: 5px;" class="info">
+            <h4 style="font-family: 'Times New Roman';">Nom : {{ prof.nom }}</h4>
+            <h4 style="font-family: 'Times New Roman';">Prenom : {{ prof.prenom }}</h4>
+            <h4 style="font-family: 'Times New Roman';">Grade(Enseignant-chercheur):
+                {% if  prof.diplome.libelle == "PA" or prof.diplome.libelle == "PES" or prof.diplome.libelle == "PH"%}
+                    {{ prof.diplome.libelle|default_if_none:""  }}
+                {% else %}
+                    {{ prof.grade|default_if_none:""  }}
+                {% endif %}
+                 </h4>
+            <h4 style="font-family: 'Times New Roman';">Diplôme (Autre personnel):
+                {% if  prof.diplome.libelle == "PA" or prof.diplome.libelle == "PES" or prof.diplome.libelle == "PH"%}
+                    DOCTEUR
+                {% else %}
+                    {{ prof.diplome.libelle|default_if_none:"" }}
+
+                {% endif %}
+
+            </h4>
+            <h4 style="font-family: 'Times New Roman';">Matière Enseignée: {{ matiere }}</h4>
+            <h4 style="font-family: 'Times New Roman';">Mois et Année : {{ month|month_name|upper }} {{ year }}</h4>
+                <br>
+        </div>
+        <table width="500" border="1">
+            <tbody>
+                <tr class="tab">
+                    <td rowspan="2" width="76" class="tab">
+                        <h4><center>Jours</center></h4>
+                    </td>
+                    <td colspan="6" width="539" class="tab">
+                        <h4><center>Nombre d&rsquo;heures</center></h4>
+                    </td>
+                </tr>
+            <tr class="semaine">
+            <td width="85">
+            <p style="margin-left:5px"><strong>1<sup>&egrave;re</sup> Semaine</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px"><strong>2<sup>&egrave;me</sup> Semaine</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px"><strong>3<sup>&egrave;me</sup> Semaine</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px"><strong>4<sup>&egrave;me</sup> Semaine</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px"><strong>5<sup>&egrave;me</sup> Semaine</strong></p>
+            </td>
+            <td width="113">
+            <p><strong><center>Total</center></strong></p>
+            </td>
+            </tr>
+            <tr class="tab">
+            <td width="76">
+            <p style="margin-left:5px"><strong>Lundi</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine1 %}
+                    {{ sc1.lundi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine2 %}
+                    {{ sc1.lundi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine3 %}
+                    {{ sc1.lundi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine4 %}
+                    {{ sc1.lundi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">&nbsp;
+                {% for sc1 in semaine5 %}
+                    {{ sc1.lundi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="113">
+            <p style="margin-left:5px">&nbsp;</p>
+            </td>
+            </tr>
+            <tr class="tab">
+            <td width="76">
+            <p style="margin-left:5px"><strong>Mardi</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine1 %}
+                    {{ sc1.Mardi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine2 %}
+                    {{ sc1.Mardi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine3 %}
+                    {{ sc1.Mardi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine4 %}
+                    {{ sc1.Mardi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine5 %}
+                    {{ sc1.Mardi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="113">
+            <p style="margin-left:5px">&nbsp;</p>
+            </td>
+            </tr>
+            <tr class="tab">
+            <td width="76">
+            <p style="margin-left:5px"><strong>Mercredi</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine1 %}
+                    {{ sc1.Mercredi_modif|default_if_none:""}}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine2 %}
+                    {{ sc1.Mercredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine3 %}
+                    {{ sc1.Mercredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine4 %}
+                    {{ sc1.Mercredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine5 %}
+                    {{ sc1.Mercredi_modif|default_if_none:""}}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="113">
+            <p style="margin-left:5px">&nbsp;</p>
+            </td>
+            </tr>
+            <tr class="tab">
+            <td width="76">
+            <p style="margin-left:5px"><strong>Jeudi</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine1 %}
+                    {{ sc1.Jeudi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine2 %}
+                    {{ sc1.Jeudi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine3 %}
+                    {{ sc1.Jeudi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine4 %}
+                    {{ sc1.Jeudi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine5 %}
+                    {{ sc1.Jeudi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="113">
+            <p style="margin-left:5px">&nbsp;</p>
+            </td>
+            </tr>
+            <tr class="tab">
+            <td width="76">
+            <p style="margin-left:5px"><strong>Vendredi </strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine1 %}
+                    {{ sc1.Vendredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine2 %}
+                    {{ sc1.Vendredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine3 %}
+                    {{ sc1.Vendredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine4 %}
+                    {{ sc1.Vendredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine5 %}
+                    {{ sc1.Vendredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="113">
+            <p style="margin-left:5px">&nbsp;</p>
+            </td>
+            </tr>
+            <tr class="tab">
+            <td width="76">
+            <p style="margin-left:5px"><strong>Samedi </strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine1 %}
+                    {{ sc1.Samedi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine2 %}
+                    {{ sc1.Samedi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine3 %}
+                    {{ sc1.Samedi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine4 %}
+                    {{ sc1.Samedi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine5 %}
+                    {{ sc1.Samedi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="113">
+            <p style="margin-left:5px">&nbsp;</p>
+            </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <div style="margin-left: 440px;">
+             <div style="display: inline">Total des heures &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div style="display: inline ; margin-left: 20px;"><strong>{{ count_horaire|filter_heure  }}</strong></div></strong><br>
+            {%  if taux_brut %}
+                <div style="display: inline">Taux horaire brut &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div style="display: inline">{{ taux_brut|floatformat  }} DH\h</div><br>
+                <div style="display: inline"> Montant brut&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div style="display: inline">{{ count_net|floatformat  }} DH</div></strong>
+             {% endif %}
+        </div>
+
+                </table>
+
+        <div style="font-size: 13px;">
+
+            Arrêté le présent mémoire à la somme de :<br>
+            {{ words|title }}
+            <br>
+        </div>
+        <div style="margin-left:490px; font-size: 13px;">
+            <br>
+            Casablanca, le ……………………..
+<br>
+        </div>
+<br><br>
+        <div class="footer" style="font-size: 13px;">
+            <table>
+                <tr>
+                    <td>
+                        <strong><u>L’Enseignant</u><br><span style="color: white">azdza</span></strong>
+                    </td>
+                    <td>
+                        <strong><u>Responsable de l’Unité </u><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u>de Formation</u></strong>
+                    </td>
+                    <td>
+                        <strong><u>Directeur Adjoint Chargé des </u><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u>Etudes</u><br></strong>
+                    </td>
+                </tr>
+            </table>
+            <br><br><br>
+            <div style="margin-left: 550px; margin-top: 15px;">
+                AIAC.PS09.E006/00
+            </div>
+        </div>
+
+</body>
+</html>

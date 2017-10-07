@@ -1,0 +1,348 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+  {% block title %}ICNA | Courant{% endblock %}
+    {% block style %}
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-8">
+      <!-- DataTables -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+        <link href='{% static 'css/fullcalendar.css' %}' rel='stylesheet' />
+        <link rel="stylesheet" href="{% static 'fullcalendar/fullcalendar.print.css' %}" media="print">
+        <style>
+        #calendar{
+            margin: auto;
+        }
+        </style>
+        <!-- Theme style -->
+    {% endblock %}
+    {% block header %}
+        <br>
+
+        <h1 style="color:#23527c ;margin-left: 10px;">Accueil</h1>
+        <br>
+        <small> </small>
+    {% endblock %}
+        {% block menu %}
+        <li class="active">
+          <a href="{% url 'index' %}">
+            <i class="fa fa-home "></i> <span>Accueil</span>
+          </a>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-calendar"></i> <span>Emploi du Temps</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'emploi_courant' %}"><i class="fa fa-circle-o"></i> Courant</a></li>
+            <li class=""><a href="{% url 'emploi_courant_archive' %}"><i class="fa fa-circle-o"></i> Archivés</a></li>
+          </ul>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-book"></i> <span>Matières</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'matiere' %}"><i class="fa fa-circle-o"></i> Lister</a></li>
+            <li class=""><a href="http://127.0.0.1:8000/admin/app/matiere/"><i class="fa fa-circle-o text-aqua"></i> Gérer</a></li>
+          </ul>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-graduation-cap"></i> <span>Etudiants</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'gestion_etudiant' %}"><i class="fa fa-circle-o"></i> Lister</a></li>
+            <li class=""><a href="http://127.0.0.1:8000/admin/app/etudiant/"><i class="fa fa-circle-o text-aqua"></i> Gérer</a></li>
+          </ul>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-suitcase"></i> <span>Professeurs</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'prof' %}"><i class="fa fa-circle-o"></i> Lister</a></li>
+            <li class=""><a href="http://127.0.0.1:8000/admin/app/professeur/"><i class="fa fa-circle-o text-aqua"></i> Gérer</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-address-book"></i> <span>Répertoire téléphonique</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{% url 'repertoire_prof' %}"><i class="fa fa-circle-o"></i> Professeurs</a></li>
+            <li><a href="{% url 'repertoire_etud' %}"><i class="fa fa-circle-o"></i> Etudiants</a></li>
+          </ul>
+        </li>
+              <li>
+        <a href="{% url 'tuto' %}">
+            <i class="fa fa-newspaper-o"></i> <span>Mode d'emploi</span>
+        </a>
+        </li>
+    {% endblock %}
+    {% block  breadcrumb%}
+        <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+    {% endblock %}
+    {% block content %}
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-lg-12 text-center">
+
+                <div id="calendar" class="col-centered">
+                </div>
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+		<!-- Modal -->
+		<div class="modal fade" id="ModalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			<form class="form-horizontal" method="POST" action="{% url 'addevent' %}">
+			{% csrf_token %}
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Ajouter un Evenement</h4>
+			  </div>
+			  <div class="modal-body">
+
+				  <div class="form-group">
+					<label for="title" class="col-sm-2 control-label">Titre</label>
+					<div class="col-sm-10">
+					  <input type="text" name="title" class="form-control" id="title" placeholder="Titre">
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label for="color" class="col-sm-2 control-label">Couleur</label>
+					<div class="col-sm-10">
+					  <select name="color" class="form-control" id="color">
+						  <option value="">Couleur</option>
+						  <option style="color:#0071c5;" value="#0071c5">Bleu</option>
+						  <option style="color:#40E0D0;" value="#40E0D0">Turquoise</option>
+						  <option style="color:#008000;" value="#008000">Vert</option>
+						  <option style="color:#FFD700;" value="#FFD700">Jaune</option>
+						  <option style="color:#FF8C00;" value="#FF8C00">Orange</option>
+						  <option style="color:#FF0000;" value="#FF0000">Rouge</option>
+						  <option style="color:#000;" value="#000">Noir</option>
+
+						</select>
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label for="start" class="col-sm-2 control-label">Date début</label>
+					<div class="col-sm-10">
+					  <input type="text" name="start" class="form-control" id="start" readonly>
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label for="end" class="col-sm-2 control-label">Date fin</label>
+					<div class="col-sm-10">
+					  <input type="text" name="end" class="form-control" id="end" readonly>
+					</div>
+				  </div>
+
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+				<button type="submit" class="btn btn-primary">Enregister</button>
+			  </div>
+			</form>
+			</div>
+		  </div>
+		</div>
+
+
+
+		<!-- Modal -->
+		<div class="modal fade" id="ModalEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			<form class="form-horizontal" method="POST" action="{% url 'editTitle' %}">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Edit Event</h4>
+			  </div>
+			  <div class="modal-body">
+
+				  <div class="form-group">
+					<label for="title" class="col-sm-2 control-label">Titre</label>
+					<div class="col-sm-10">
+					  <input type="text" name="title" class="form-control" id="title" placeholder="Title">
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label for="color" class="col-sm-2 control-label">Couleur</label>
+					<div class="col-sm-10">
+					  <select name="color" class="form-control" id="color">
+						  <option value="">Choose</option>
+						  <option style="color:#0071c5;" value="#0071c5">Bleu</option>
+						  <option style="color:#40E0D0;" value="#40E0D0">Turquoise</option>
+						  <option style="color:#008000;" value="#008000">Vert</option>
+						  <option style="color:#FFD700;" value="#FFD700">Jaune</option>
+						  <option style="color:#FF8C00;" value="#FF8C00">Orange</option>
+						  <option style="color:#FF0000;" value="#FF0000">Rouge</option>
+						  <option style="color:#000;" value="#000">Black</option>
+
+						</select>
+					</div>
+				  </div>
+				    <div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+						  <div class="checkbox">
+							<label class="text-danger"><input type="checkbox"  name="delete"> Supprimer l'événement</label>
+						  </div>
+						</div>
+					</div>
+
+				  <input type="hidden" name="id" class="form-control" id="id">
+
+
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+				<button type="submit" class="btn btn-primary">Enregistrer</button>
+			  </div>
+			</form>
+			</div>
+		  </div>
+		</div>
+    {% endblock %}
+<!-- jQuery 2.2.3 -->
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+<script src="{% static 'js/plugins/fullcalendar/fullcalendar.min.js' %}"></script>
+    <script src='{% static 'js/fr-ca.js' %}'> </script>
+
+<!-- Page specific script -->
+<script>
+  $(function () {
+
+    /* initialize the external events
+     -----------------------------------------------------------------*/
+    function ini_events(ele) {
+      ele.each(function () {
+
+        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+        // it doesn't need to have a start or end
+        var eventObject = {
+          title: $.trim($(this).text()) // use the element's text as the event title
+        };
+
+        // store the Event Object in the DOM element so we can get to it later
+        $(this).data('eventObject', eventObject);
+
+        // make the event draggable using jQuery UI
+        $(this).draggable({
+          zIndex: 1070,
+          revert: true, // will cause the event to go back to its
+          revertDuration: 0  //  original position after the drag
+        });
+
+      });
+    }
+
+    ini_events($('#external-events div.external-event'));
+
+    /* initialize the calendar
+     -----------------------------------------------------------------*/
+    //Date for the calendar events (dummy data)
+    var date = new Date();
+    var d = date.getDate(),
+        m = date.getMonth(),
+        y = date.getFullYear();
+    $('#calendar').fullCalendar({
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay'
+      },
+        lang : 'fr-ca',
+      buttonText: {
+        today: 'today',
+        month: 'month',
+        week: 'week',
+        day: 'day'
+      },
+      //Random default events
+      events: "/events/",
+      editable: true,
+      droppable: true,
+    selectable: true,
+			selectHelper: true,
+			select: function(start, end) {
+
+				$('#ModalAdd #start').val(moment(start).format('YYYY-MM-DD HH:mm:ss'));
+				$('#ModalAdd #end').val(moment(end).format('YYYY-MM-DD HH:mm:ss'));
+				$('#ModalAdd').modal('show');
+			},
+			eventRender: function(event, element) {
+				element.bind('dblclick', function() {
+					$('#ModalEdit #id').val(event.id);
+					$('#ModalEdit #title').val(event.title);
+					$('#ModalEdit #color').val(event.color);
+					$('#ModalEdit').modal('show');
+				});
+			},
+			eventDrop: function(event, delta, revertFunc) { // si changement de position
+
+				edit(event);
+
+			},
+			eventResize: function(event,dayDelta,minuteDelta,revertFunc) { // si changement de longueur
+
+				edit(event);
+
+			},
+			events: "/events/"
+		});
+
+		function edit(event){
+			start = event.start.format('YYYY-MM-DD HH:mm:ss');
+			if(event.end){
+				end = event.end.format('YYYY-MM-DD HH:mm:ss');
+			}else{
+				end = start;
+			}
+
+			id =  event.id;
+
+			Event = [];
+			Event[0] = id;
+			Event[1] = start;
+			Event[2] = end;
+
+			$.ajax({
+			 url: '/edit/',
+			 type: "POST",
+			 data: {csrfmiddlewaretoken : $('input[name=csrfmiddlewaretoken]').val() , laps:Event  },
+			 success: function(rep) {
+					if(rep == 'OK'){
+						alert('Saved');
+					}else{
+						alert('Could not be saved. try again.');
+					}
+				}
+			});
+		}
+
+	});
+</script>
+{% endblock %}

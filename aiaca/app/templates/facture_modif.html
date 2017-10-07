@@ -1,0 +1,437 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load filtre %}
+  {% block title %}ICNA | Mémoire des sommes dues pour vacations{% endblock %}
+    {% block style %}
+      <!-- DataTables -->
+       <link rel="stylesheet" href="{% static '/css/dataTables.bootstrap.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+      <!-- Theme style -->
+        <style>
+        table{
+            font-family: Cambria;
+        }
+        table > p{
+            margin-left: 5px;
+        }
+        </style>
+    {% endblock %}
+    {% block header %}
+        <h1><br><br></h1>
+        <small> </small>
+    {% endblock %}
+        {% block menu %}
+        <li>
+          <a href="{% url 'index' %}">
+            <i class="fa fa-home "></i> <span>Accueil</span>
+          </a>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-calendar"></i> <span>Emploi du Temps</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'emploi_courant' %}"><i class="fa fa-circle-o"></i> Courant</a></li>
+            <li class=""><a href="{% url 'emploi_courant_archive' %}"><i class="fa fa-circle-o"></i> Archivés</a></li>
+          </ul>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-book"></i> <span>Matières</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'matiere' %}"><i class="fa fa-circle-o"></i> Lister</a></li>
+            <li class=""><a href="http://127.0.0.1:8000/admin/app/matiere/"><i class="fa fa-circle-o text-aqua"></i> Gérer</a></li>
+          </ul>
+        </li>
+        <li class=" treeview">
+          <a href="#">
+            <i class="fa fa-graduation-cap"></i> <span>Etudiants</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="{% url 'gestion_etudiant' %}"><i class="fa fa-circle-o"></i> Lister</a></li>
+            <li class=""><a href="http://127.0.0.1:8000/admin/app/etudiant/"><i class="fa fa-circle-o text-aqua"></i> Gérer</a></li>
+          </ul>
+        </li>
+        <li class=" treeview active">
+          <a href="#">
+            <i class="fa fa-suitcase"></i> <span>Professeurs</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active"><a href="{% url 'prof' %}"><i class="fa fa-circle-o"></i> Lister</a></li>
+            <li class=""><a href="http://127.0.0.1:8000/admin/app/professeur/"><i class="fa fa-circle-o text-aqua"></i> Gérer</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-address-book"></i> <span>Répertoire téléphonique</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{% url 'repertoire_prof' %}"><i class="fa fa-circle-o"></i> Professeurs</a></li>
+            <li><a href="{% url 'repertoire_etud' %}"><i class="fa fa-circle-o"></i> Etudiants</a></li>
+          </ul>
+        </li>
+            <li>
+        <a href="{% url 'tuto' %}">
+            <i class="fa fa-newspaper-o"></i> <span>Mode d'emploi</span>
+        </a>
+        </li>
+    {% endblock %}
+    {% block  breadcrumb%}
+        <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+        <li class="active"><a href="#">Mémoire des sommes dues pour vacations</a></li>
+    {% endblock %}
+    {% block content %}
+        <div class="box" style="font-family: Cambria">
+            <h3 style="font-family: 'Times New Roman';"><u><b><center>Mémoire des sommes dues pour vacations</center></b></u></h3><br><br>
+            <div style="margin-left: 90px;">
+            <h4 style="font-family: 'Times New Roman';">Nom : {{ prof.nom }}</h4>
+            <h4 style="font-family: 'Times New Roman';">Prenom : {{ prof.prenom }}</h4>
+            <h4 style="font-family: 'Times New Roman';">Grade(Enseignant-chercheur):
+                {% if  prof.diplome.libelle == "PA" or prof.diplome.libelle == "PES" or prof.diplome.libelle == "PH"%}
+                    {{ prof.diplome.libelle|default_if_none:""  }}
+                {% else %}
+                    {{ prof.grade|default_if_none:""  }}
+                {% endif %}
+                 </h4>
+            <h4 style="font-family: 'Times New Roman';">Diplôme (Autre personnel):
+                {% if  prof.diplome.libelle == "PA" or prof.diplome.libelle == "PES" or prof.diplome.libelle == "PH"%}
+                    DOCTEUR
+                {% else %}
+                    {{ prof.diplome.libelle|default_if_none:"" }}
+
+                {% endif %}
+
+            </h4>
+            <h4 style="font-family: 'Times New Roman';">Matière Enseignée: {{ matiere }}</h4>
+            <h4 style="font-family: 'Times New Roman';">Mois et Année : {{ month|month_name }} {{ year }}</h4>
+        </div>
+        <table width="900" border="1" style="margin: auto ; margin-top: 50px;">
+            <tbody>
+                <tr>
+                    <td rowspan="2" width="76">
+                        <h4>Jours</h4>
+                    </td>
+                    <td colspan="6" width="539">
+                        <h4><center>Nombre d&rsquo;heures</center></h4>
+                    </td>
+                </tr>
+            <tr>
+            <td width="85">
+            <p style="margin-left:5px"><strong>1<sup>&egrave;re</sup> Semaine</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px"><strong>2<sup>&egrave;me</sup> Semaine</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px"><strong>3<sup>&egrave;me</sup> Semaine</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px"><strong>4<sup>&egrave;me</sup> Semaine</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px"><strong>5<sup>&egrave;me</sup> Semaine</strong></p>
+            </td>
+            <td width="113">
+            <p style="margin-left:5px"><strong>Total</strong></p>
+            </td>
+            </tr>
+            <tr>
+            <td width="76">
+            <p style="margin-left:5px"><strong>Lundi</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine1 %}
+                    {{ sc1.lundi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine2 %}
+                    {{ sc1.lundi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine3 %}
+                    {{ sc1.lundi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine4 %}
+                    {{ sc1.lundi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine5 %}
+                    {{ sc1.lundi_modif|default_if_none:"" }}
+                {% endfor %}</p>
+            </td>
+            <td width="113">
+            <p style="margin-left:5px">&nbsp;</p>
+            </td>
+            </tr>
+            <tr>
+            <td width="76">
+            <p style="margin-left:5px"><strong>Mardi</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine1 %}
+                    {{ sc1.Mardi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine2 %}
+                    {{ sc1.Mardi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine3 %}
+                    {{ sc1.Mardi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine4 %}
+                    {{ sc1.Mardi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine5 %}
+                    {{ sc1.Mardi_modif|default_if_none:""  }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="113">
+            <p style="margin-left:5px">&nbsp;</p>
+            </td>
+            </tr>
+            <tr>
+            <td width="76">
+            <p style="margin-left:5px"><strong>Mercredi</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine1 %}
+                    {{ sc1.Mercredi_modif|default_if_none:""}}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine2 %}
+                    {{ sc1.Mercredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine3 %}
+                    {{ sc1.Mercredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine4 %}
+                    {{ sc1.Mercredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine5 %}
+                    {{ sc1.Mercredi_modif|default_if_none:""}}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="113">
+            <p style="margin-left:5px">&nbsp;</p>
+            </td>
+            </tr>
+            <tr>
+            <td width="76">
+            <p style="margin-left:5px"><strong>Jeudi</strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine1 %}
+                    {{ sc1.Jeudi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine2 %}
+                    {{ sc1.Jeudi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine3 %}
+                    {{ sc1.Jeudi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine4 %}
+                    {{ sc1.Jeudi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine5 %}
+                    {{ sc1.Jeudi_modif|default_if_none:""  }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="113">
+            <p style="margin-left:5px">&nbsp;</p>
+            </td>
+            </tr>
+            <tr>
+            <td width="76">
+            <p style="margin-left:5px"><strong>Vendredi </strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine1 %}
+                    {{ sc1.Vendredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine2 %}
+                    {{ sc1.Vendredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine3 %}
+                    {{ sc1.Vendredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine4 %}
+                    {{ sc1.Vendredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine5 %}
+                    {{ sc1.Vendredi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="113">
+            <p style="margin-left:5px">&nbsp;</p>
+            </td>
+            </tr>
+            <tr>
+            <td width="76">
+            <p style="margin-left:5px"><strong>Samedi </strong></p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine1 %}
+                    {{ sc1.Samedi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine2 %}
+                    {{ sc1.Samedi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine3 %}
+                    {{ sc1.Samedi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine4 %}
+                    {{ sc1.Samedi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="85">
+            <p style="margin-left:5px">
+                {% for sc1 in semaine5 %}
+                    {{ sc1.Samedi_modif|default_if_none:"" }}
+                {% endfor %}
+            </p>
+            </td>
+            <td width="113">
+            <p style="margin-left:5px">&nbsp;</p>
+            </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <div style="margin:10px 0px 0px 800px; padding: 0px 0px 20px 0px; line-height: 6px;">
+            <p><span  style="color:#2E2EFE;"><strong>Total des heures : </strong></span>{{ count_horaire|filter_heure  }}</p>
+            {% if taux_brut %}
+                <p>Taux horaire net : {{ taux_net }} Dh/h</p>
+                <p>Montant Net  :{{ count_brut }} </p>
+                <p>Taux horaire brut : {{ taux_brut }}</p>
+                <p>Montant brut : {{ count_net }} </p>
+            {% endif %}
+        </div>
+        </div>
+        <div style="margin-left: 825px;">
+            <a href="{{ request.path }}modif" target="_blank" class="btn btn-default" style="padding: 6px 25px 6px 25px;"><i class="fa fa-refresh" style="padding: 0px 3px 0px 3px;"></i>  Modifier</a>
+        <a href="{{ request.path }}fiche_modif" target="_blank" class="btn btn-success"><i class="fa fa-download" ></i>  Générer le PDF</a>
+        </div>
+    {% endblock %}
+<!-- jQuery 2.2.3 -->
+{% block script %}
+
+{% endblock %}
+</body>
+</html>
